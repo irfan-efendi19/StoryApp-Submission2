@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Sign In</string>
+    <string name="message_welcome_page">Designed to prepare students with in-demand skills and tech certifications, the Bangkit curriculum offers 3 interdisciplinary learning paths - machine learning, mobile development, and cloud computing.</string>
+    <string name="title_welcome_page">Kickstart your tech career with Bangkit</string>
+    <string name="title_signup_page">Complete your data below</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_length">Password has to contain at least 8 character</string>
+    <string name="message_login_page">Learn from and connect with tech experts from leading companies in Indonesia</string>
+    <string name="title_login_page">Ready To Go On a Journey in Search of Knowledge</string>
+    <string name="name">Name</string>
+    <string name="message_main_page">Welcome</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="logout">Log Out</string>
+    <string name="permission">Failed to get permission</string>
+    <string name="caption">" You have to input a picture and description"</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_email">Enter E-Mail</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="invalid_email">E-Mail is invalid! Must contain \"@\" and \".\".</string>
+    <string name="invalid_file">Enter the image and description first</string>
+
+    //sign
+    <string name="fill_username">Name cannot be empty</string>
+    <string name="fill_email">Email cannot be empty</string>
+    <string name="fill_password">The password cannot be empty</string>
+    <string name="next">Next</string>
+    <string name="succes_login">You have successfully registered. Can`t wait, right?</string>
+</resources>

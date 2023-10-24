@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="signup">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="message_welcome_page">Dirancang untuk mempersiapkan siswa dengan keterampilan yang dibutuhkan dan sertifikasi teknologi, kurikulum Bangkit menawarkan 3 jalur pembelajaran interdisipliner - pembelajaran mesin, pengembangan seluler, dan komputasi awan.</string>
+    <string name="title_welcome_page">Mulailah karir teknologi Anda dengan Bangkit!</string>
+    <string name="title_signup_page">Lengkapi data mu</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_length">Kata sandi harus mengandung minimal 8 karakter</string>
+    <string name="message_login_page">Belajar dan terhubung dengan pakar teknologi dari perusahaan terkemuka di Indonesia</string>
+    <string name="title_login_page">Siap Melakukan Perjalanan Mencari Ilmu</string>
+    <string name="name">Nama</string>
+    <string name="message_main_page">Selamat Datang</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="logout">Keluar</string>
+    <string name="permission">Gagal mendapatkan izin</string>
+    <string name="caption">" You have to input a picture and description"</string>
+    <string name="enter_password">Masukkan password</string>
+    <string name="enter_name">Masukkan Nama</string>
+    <string name="enter_email">Masukkan E-Mail</string>
+    <string name="invalid_email">E-Mail tidak valid! Harus berisi \"@\" dan \".\".</string>
+    <string name="invalid_file">Masukkan gambar dan deskripsi terlebih dahulu</string>
+
+    //sign
+    <string name="fill_username">Nama tidak boleh kosong</string>
+    <string name="fill_email">Email tidak boleh kosong</string>
+    <string name="fill_password">Password tidak boleh kosong</string>
+    <string name="next">Lanjut</string>
+    <string name="succes_login">Anda berhasil Registrasi. Sudah tidak sabar ya?</string>
+</resources>
