@@ -58,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.isLoading.observe(this) {
                     showLoading(it)
                 }
-
                 val email = binding.emailEditText.text.toString()
                 val password = binding.passwordEditText.text.toString()
 

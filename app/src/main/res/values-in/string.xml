@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StoryApp</string>
+    <string name="app_name">Cerita Bangkit</string>
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
     <string name="message_welcome_page">Dirancang untuk mempersiapkan siswa dengan keterampilan yang dibutuhkan dan sertifikasi teknologi, kurikulum Bangkit menawarkan 3 jalur pembelajaran interdisipliner - pembelajaran mesin, pengembangan seluler, dan komputasi awan.</string>

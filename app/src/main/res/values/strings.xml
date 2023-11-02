@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StoryApp</string>
+    <string name="app_name">Bangkit Story</string>
     <string name="signup">Sign Up</string>
     <string name="login">Sign In</string>
     <string name="message_welcome_page">Designed to prepare students with in-demand skills and tech certifications, the Bangkit curriculum offers 3 interdisciplinary learning paths - machine learning, mobile development, and cloud computing.</string>
@@ -28,4 +28,5 @@
     <string name="fill_password">The password cannot be empty</string>
     <string name="next">Next</string>
     <string name="succes_login">You have successfully registered. Can`t wait, right?</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
