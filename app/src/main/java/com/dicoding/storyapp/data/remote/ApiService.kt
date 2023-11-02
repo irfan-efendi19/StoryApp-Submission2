@@ -1,5 +1,6 @@
 package com.dicoding.storyapp.data.remote
 
+import com.dicoding.storyapp.data.response.CreateStoryResponse
 import com.dicoding.storyapp.data.response.LoginResponse
 import com.dicoding.storyapp.data.response.RegisterResponse
 import com.dicoding.storyapp.data.response.StoryResponse
@@ -10,6 +11,8 @@ import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -38,7 +41,7 @@ interface ApiService {
     @POST("stories")
     fun uploadImage(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody,
+        @Part("description") description: RequestBody
     ): Call<UploadResponse>
 
     @GET("stories")
@@ -47,10 +50,22 @@ interface ApiService {
     ): StoryResponse
 
     @GET("stories")
-    suspend fun getStories(
-        @Query("page") page: Int = 1,
-        @Query("size") size: Int = 20
+    suspend fun getStory(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("location") location: Int
     ): StoryResponse
+
+    @Multipart
+    @POST("stories")
+    suspend fun createStory(
+        @Header("Authorization") token: String,
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: Double,
+        @Part("lon") lon: Double,
+    ): CreateStoryResponse
 }
 
 

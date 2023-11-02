@@ -7,10 +7,12 @@ import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.di.Injection
 import com.dicoding.storyapp.view.login.LoginViewModel
 import com.dicoding.storyapp.view.main.MainViewModel
+import com.dicoding.storyapp.view.maps.MapsViewModel
 import com.dicoding.storyapp.view.signup.SignupViewModel
 import com.dicoding.storyapp.view.uploadstory.UploadStoryViewModel
 
-class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory(private val repository: UserRepository) :
+    ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -30,6 +32,11 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             modelClass.isAssignableFrom(UploadStoryViewModel::class.java) -> {
                 UploadStoryViewModel(repository) as T
             }
+
+            (modelClass.isAssignableFrom(MapsViewModel::class.java)) -> {
+                MapsViewModel(repository) as T
+            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

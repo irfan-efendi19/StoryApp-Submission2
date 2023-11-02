@@ -29,4 +29,5 @@
     <string name="fill_password">Password tidak boleh kosong</string>
     <string name="next">Lanjut</string>
     <string name="succes_login">Anda berhasil Registrasi. Sudah tidak sabar ya?</string>
+    <string name="retry">Coba Lagi</string>
 </resources>

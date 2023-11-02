@@ -2,6 +2,7 @@ package com.dicoding.storyapp.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.dicoding.storyapp.data.preference.UserModel
 import com.dicoding.storyapp.data.preference.UserPreference
@@ -27,6 +28,8 @@ class UserRepository private constructor(
 
     private var _loginResult = MutableLiveData<LoginResponse>()
     var loginResult: MutableLiveData<LoginResponse> = _loginResult
+
+    private val storyWithLocationResult = MediatorLiveData<Result<List<ListStoryItem>>>()
 
     var _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
