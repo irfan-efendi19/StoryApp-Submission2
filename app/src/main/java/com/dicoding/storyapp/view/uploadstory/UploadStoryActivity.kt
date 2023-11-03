@@ -88,7 +88,6 @@ class UploadStoryActivity : AppCompatActivity() {
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.buttonAdd.setOnClickListener { uploadImage() }
-
         binding.itemCheck.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 getMyLastLocation()
@@ -176,12 +175,12 @@ class UploadStoryActivity : AppCompatActivity() {
             Log.d("Image File", "showImage: ${imageFile.path}")
             val description = binding.edAddDescription.text.toString()
             if (description.isEmpty()) {
-//                binding.edAddDescription.error = getString(R.string.empty_description_warning)
+                binding.edAddDescription.error = getString(R.string.invalid_file)
                 return
             }
 
-            val location = binding.itemCheck.isChecked
-            if (!location) {
+            val checkLocation = binding.itemCheck.isChecked
+            if (!checkLocation) {
                 lat = 0f.toDouble()
                 long = 0f.toDouble()
             } else {
@@ -216,6 +215,10 @@ class UploadStoryActivity : AppCompatActivity() {
                                 is Result.Error -> {
                                     showLoading(false)
                                     showToast(result.error)
+                                }
+
+                                else -> {
+                                    //
                                 }
                             }
                         }

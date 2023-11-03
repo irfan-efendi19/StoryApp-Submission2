@@ -1,6 +1,5 @@
 package com.dicoding.storyapp.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -9,7 +8,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.dicoding.storyapp.data.Result
 import com.dicoding.storyapp.data.database.DatabaseStory
 import com.dicoding.storyapp.data.paging.StoryRemoteMediator
 import com.dicoding.storyapp.data.preference.UserModel
@@ -24,10 +22,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
 class UserRepository private constructor(
@@ -138,7 +133,6 @@ class UserRepository private constructor(
         } else {
             apiService.uploadImage(file, description)
         }
-
         if (response.error == false) {
             emit(Result.Success(response))
         } else {
