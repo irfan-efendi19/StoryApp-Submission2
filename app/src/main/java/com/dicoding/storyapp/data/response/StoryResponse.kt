@@ -1,8 +1,10 @@
 package com.dicoding.storyapp.data.response
 
 import android.os.Parcelable
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+
 
 data class StoryResponse(
 
@@ -16,6 +18,7 @@ data class StoryResponse(
 	val message: String? = null
 )
 
+@Entity(tableName = "story")
 @Parcelize
 data class ListStoryItem(
 

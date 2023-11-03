@@ -59,9 +59,9 @@ class LoginActivity : AppCompatActivity() {
                 val password = binding.passwordEditText.text.toString()
 
                 if (email.isEmpty()) {
-                    binding.emailEditText.error = R.string.invalid_email.toString()
+                    binding.emailEditText.error = getString(R.string.fill_email)
                 } else if (password.isEmpty()) {
-                    binding.passwordEditText.error = R.string.password_length.toString()
+                    binding.passwordEditText.error = getString(R.string.fill_password)
                 } else {
                     lifecycleScope.launch {
                         viewModel.login(email, password).observe(this@LoginActivity) { result ->
@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
 
                                     is Result.Success -> {
                                         showLoading(false)
-                                        showToast(R.string.password_length.toString())
+                                        showToast("Login berhasil!")
                                         lifecycleScope.launch {
                                             save(
                                                 UserModel(

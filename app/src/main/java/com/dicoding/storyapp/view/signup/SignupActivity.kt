@@ -60,11 +60,11 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             if (name.isEmpty()) {
-                binding.nameEditTextLayout.error = R.string.fill_username.toString()
+                binding.nameEditTextLayout.error = getString(R.string.fill_username)
             } else if (email.isEmpty()) {
-                binding.emailEditTextLayout.error = R.string.fill_email.toString()
+                binding.emailEditTextLayout.error = getString(R.string.fill_email)
             } else if (password.isEmpty()) {
-                binding.passwordEditTextLayout.error = R.string.fill_password.toString()
+                binding.passwordEditTextLayout.error = getString(R.string.fill_email)
             }
 
             lifecycleScope.launch {
@@ -79,7 +79,7 @@ class SignupActivity : AppCompatActivity() {
 
                                     is Result.Success -> {
                                         showLoading(false)
-                                        showToast("Register berhasil!")
+                                        showToast(getString(R.string.succes_login))
                                         val intent =
                                             Intent(this@SignupActivity, LoginActivity::class.java)
                                         intent.flags =
