@@ -8,6 +8,10 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.dicoding.storyapp.data.Result
+import com.dicoding.storyapp.data.database.DatabaseStory
+import com.dicoding.storyapp.data.paging.StoryRemoteMediator
 import com.dicoding.storyapp.data.preference.UserModel
 import com.dicoding.storyapp.data.preference.UserPreference
 import com.dicoding.storyapp.data.remote.ApiService
@@ -25,9 +29,11 @@ import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
+@Suppress("IMPLICIT_CAST_TO_ANY")
 class UserRepository private constructor(
     private val apiService: ApiService,
-    private val userPreference: UserPreference
+    private val userPreference: UserPreference,
+    private val database: DatabaseStory,
 ) {
     private var _list = MutableLiveData<List<ListStoryItem>>()
     var list: MutableLiveData<List<ListStoryItem>> = _list
@@ -35,17 +41,17 @@ class UserRepository private constructor(
     var _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
 
-//    fun getStory(): LiveData<PagingData<ListStoryItem>> {
-//        @OptIn(ExperimentalPagingApi::class)
-//        return Pager(config = PagingConfig(
-//            pageSize = 5
-//        ),
-//            remoteMediator = StoryRemoteMediator(database, apiService),
-//            pagingSourceFactory = {
-//                database.storyDao().getAllStory()
-//            }
-//        ).liveData
-//    }
+    fun getStory(): LiveData<PagingData<ListStoryItem>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(config = PagingConfig(
+            pageSize = 5
+        ),
+            remoteMediator = StoryRemoteMediator(database, apiService),
+            pagingSourceFactory = {
+                database.storyDao().getAllStory()
+            }
+        ).liveData
+    }
 
 //    fun getStory() {
 //        _isLoading.value = true
@@ -120,24 +126,24 @@ class UserRepository private constructor(
         userPreference.logOut()
     }
 
-    fun uploadImage(file: MultipartBody.Part, description: RequestBody) {
-        _isLoading.value = true
-        val client = apiService.uploadImage(file, description)
-        client.enqueue(object : Callback<UploadResponse> {
-            override fun onResponse(
-                call: Call<UploadResponse>,
-                response: Response<UploadResponse>
-            ) {
-                if (response.isSuccessful) {
-                    _isLoading.value = false
-                }
-            }
+    suspend fun uploadImage(
+        file: MultipartBody.Part,
+        description: RequestBody,
+        lat: Float,
+        lon: Float
+    ): LiveData<Result<UploadResponse>> = liveData {
+        emit(Result.Loading)
+        val response = if (lat != 0f && lon != 0f) {
+            apiService.uploadImageWithLocation(file, description, lat, lon)
+        } else {
+            apiService.uploadImage(file, description)
+        }
 
-            override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e("Repository", "error: ${t.message}")
-            }
-        })
+        if (response.error == false) {
+            emit(Result.Success(response))
+        } else {
+            emit(Result.Error(response.message.toString()))
+        }
     }
 
     companion object {
@@ -148,9 +154,13 @@ class UserRepository private constructor(
             instance = null
         }
 
-        fun getInstance(apiService: ApiService, userPreference: UserPreference): UserRepository =
+        fun getInstance(
+            database: DatabaseStory,
+            apiService: ApiService,
+            userPreference: UserPreference
+        ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(apiService, userPreference)
+                instance ?: UserRepository(apiService, userPreference, database)
             }.also { instance = it }
     }
 }

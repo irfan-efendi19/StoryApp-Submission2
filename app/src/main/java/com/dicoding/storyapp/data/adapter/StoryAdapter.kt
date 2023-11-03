@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.dicoding.storyapp.data.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ItemHorderBinding
 import com.dicoding.storyapp.view.detail.DetailActivity
 
-class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFFUTIL) {
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFFUTIL) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemHorderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -21,7 +22,9 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFFUTI
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val story = getItem(position)
-        holder.bind(story)
+        if (story != null) {
+            holder.bind(story)
+        }
     }
 
     inner class ViewHolder(private val binding: ItemHorderBinding) :

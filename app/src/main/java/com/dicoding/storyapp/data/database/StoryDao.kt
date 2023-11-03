@@ -18,5 +18,4 @@ interface StoryDao {
 
     @Query("DELETE FROM story")
     fun deleteAllStory()
-
 }

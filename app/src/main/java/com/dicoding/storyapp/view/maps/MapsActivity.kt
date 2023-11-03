@@ -3,6 +3,7 @@ package com.dicoding.storyapp.view.maps
 import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.dicoding.storyapp.databinding.ActivityMapsBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import kotlinx.coroutines.launch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -41,7 +43,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -100,6 +101,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         getMyLocation()
+        setMapStyle(googleMap)
     }
 
 
@@ -139,6 +141,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showToast(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setMapStyle(googleMap: GoogleMap) {
+        try {
+            val success =
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(binding.root.context, R.raw.maps))
+            if (!success) {
+            }
+        } catch (exception: Resources.NotFoundException) {
+        }
     }
 
     private fun getMyLocation() {

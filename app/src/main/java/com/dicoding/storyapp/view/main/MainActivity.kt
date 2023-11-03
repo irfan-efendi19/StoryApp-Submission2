@@ -9,8 +9,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.data.adapter.LoadingAdapter
 import com.dicoding.storyapp.data.adapter.StoryAdapter
 import com.dicoding.storyapp.data.response.ListStoryItem
 import com.dicoding.storyapp.databinding.ActivityMainBinding
@@ -41,14 +43,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, UploadStoryActivity::class.java)
             startActivity(intent)
         }
-
         getSession()
-        showRv()
     }
 
 
 
+
     private fun getSession() {
+        val adapter = StoryAdapter()
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 val intent = Intent(this, WelcomeActivity::class.java)
@@ -56,37 +58,35 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                viewModel.isLoading.observe(this) { state ->
-                    showLoading(state)
-                }
-
-                viewModel.getStory().observe(this) { stories ->
-                    setStoryList(stories)
+                lifecycleScope.launch {
+                    viewModel.getStory.observe(this@MainActivity) { result ->
+                        adapter.submitData(lifecycle, result)
+                        showLoading(false)
+                    }
                 }
             }
         }
+        binding.rvStory.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            this.adapter =
+                adapter.withLoadStateHeaderAndFooter(
+                    header = LoadingAdapter { adapter.retry() },
+                    footer = LoadingAdapter { adapter.retry() }
+                )
+        }
     }
 
-    private fun showRv() {
-        val layoutManager = LinearLayoutManager(this)
-        binding.rvStory.layoutManager = layoutManager
-    }
 
     private fun showLoading(state: Boolean) {
         if (state) binding.progressBarMain.visibility = View.VISIBLE
         else binding.progressBarMain.visibility = View.GONE
     }
 
-    private fun setStoryList(stories: List<ListStoryItem>?) {
-        val adapter = StoryAdapter()
-        adapter.submitList(stories)
-        binding.rvStory.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+//    private fun setStoryList(stories: PagingData<ListStoryItem>) {
+//        val adapter = StoryAdapter()
+//        adapter.submitList(stories)
+//        binding.rvStory.adapter = adapter
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.item_menu, menu)
@@ -107,6 +107,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 
