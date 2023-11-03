@@ -216,10 +216,6 @@ class UploadStoryActivity : AppCompatActivity() {
                                     showLoading(false)
                                     showToast(result.error)
                                 }
-
-                                else -> {
-                                    //
-                                }
                             }
                         }
                     }
