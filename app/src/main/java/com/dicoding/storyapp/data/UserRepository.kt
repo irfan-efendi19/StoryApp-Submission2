@@ -24,7 +24,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.HttpException
 
-@Suppress("IMPLICIT_CAST_TO_ANY")
 class UserRepository private constructor(
     private val apiService: ApiService,
     private val userPreference: UserPreference,
@@ -47,27 +46,6 @@ class UserRepository private constructor(
             }
         ).liveData
     }
-
-//    fun getStory() {
-//        _isLoading.value = true
-//        val client = apiService.getStories()
-//        client.enqueue(object : Callback<StoryResponse> {
-//            override fun onResponse(
-//                call: Call<StoryResponse>,
-//                response: Response<StoryResponse>
-//            ) {
-//                if (response.isSuccessful) {
-//                    _isLoading.value = false
-//                    _list.value = response.body()?.listStory
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e("Repository", "error: ${t.message}")
-//            }
-//        })
-//    }
 
     suspend fun register(
         name: String,
