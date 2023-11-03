@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
+    <color name="navy">#2D3D4F</color>
+    <color name="transparent">#00000000</color>
+    <drawable name="banner">@drawable/bangkitwhite</drawable>
+    <drawable name="bannerwelcome">@drawable/bangkitwhite</drawable>
+</resources>

@@ -7,7 +7,7 @@ import com.dicoding.storyapp.data.response.ListStoryItem
 
 @Database(
     entities = [ListStoryItem::class, RemoteKeys::class],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 abstract class DatabaseStory : RoomDatabase() {
