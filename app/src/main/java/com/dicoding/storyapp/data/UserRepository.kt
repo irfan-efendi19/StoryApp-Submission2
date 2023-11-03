@@ -2,8 +2,8 @@ package com.dicoding.storyapp.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.dicoding.storyapp.data.preference.UserModel
 import com.dicoding.storyapp.data.preference.UserPreference
 import com.dicoding.storyapp.data.remote.ApiService
@@ -12,11 +12,13 @@ import com.dicoding.storyapp.data.response.LoginResponse
 import com.dicoding.storyapp.data.response.RegisterResponse
 import com.dicoding.storyapp.data.response.StoryResponse
 import com.dicoding.storyapp.data.response.UploadResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class UserRepository private constructor(
@@ -25,11 +27,6 @@ class UserRepository private constructor(
 ) {
     private var _list = MutableLiveData<List<ListStoryItem>>()
     var list: MutableLiveData<List<ListStoryItem>> = _list
-
-    private var _loginResult = MutableLiveData<LoginResponse>()
-    var loginResult: MutableLiveData<LoginResponse> = _loginResult
-
-    private val storyWithLocationResult = MediatorLiveData<Result<List<ListStoryItem>>>()
 
     var _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
@@ -55,28 +52,44 @@ class UserRepository private constructor(
         })
     }
 
-    suspend fun register(name: String, email: String, password: String): RegisterResponse {
-        return apiService.register(name, email, password)
+    suspend fun register(
+        name: String,
+        email: String,
+        password: String
+    ): LiveData<Result<RegisterResponse>> = liveData {
+        emit(Result.Loading)
+        val response = apiService.register(name, email, password)
+        if (!response.error) {
+            emit(Result.Success(response))
+        } else {
+            emit(Result.Error(response.message))
+        }
     }
 
-    fun login(email: String, password: String) {
-        _isLoading.value = true
-        val client = apiService.login(email, password)
-        client.enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(
-                call: Call<LoginResponse>,
-                response: Response<LoginResponse>
-            ) {
-                if (response.isSuccessful) {
-                    _isLoading.value = false
-                    _loginResult.value = response.body()
-                }
-            }
+    suspend fun login(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.login(email, password)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, LoginResponse::class.java)
+            emit(Result.Error(errorBody.message.toString()))
+        }
+    }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e("Repository", "error: ${t.message}")
+    suspend fun getStoriesWithLocation(): LiveData<Result<StoryResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getStoriesWithLocation()
+            if (response.error == false) {
+                emit(Result.Success(response))
+            } else {
+                emit(Result.Error(response.message.toString()))
             }
-        })
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
     }
 
     suspend fun saveSession(user: UserModel) {

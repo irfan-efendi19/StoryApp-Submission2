@@ -33,7 +33,7 @@ class ViewModelFactory(private val repository: UserRepository) :
                 UploadStoryViewModel(repository) as T
             }
 
-            (modelClass.isAssignableFrom(MapsViewModel::class.java)) -> {
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
                 MapsViewModel(repository) as T
             }
 

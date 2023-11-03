@@ -3,7 +3,6 @@ package com.dicoding.storyapp.view.login
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -12,8 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.data.Result
 import com.dicoding.storyapp.data.preference.UserModel
-import com.dicoding.storyapp.data.response.RegisterResponse
+import com.dicoding.storyapp.data.response.LoginResponse
 import com.dicoding.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
@@ -55,40 +55,57 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             try {
-                viewModel.isLoading.observe(this) {
-                    showLoading(it)
-                }
                 val email = binding.emailEditText.text.toString()
                 val password = binding.passwordEditText.text.toString()
 
                 if (email.isEmpty()) {
-                    binding.emailEditText.error = getString(R.string.fill_email)
+                    binding.emailEditText.error = R.string.invalid_email.toString()
                 } else if (password.isEmpty()) {
-                    binding.passwordEditText.error = getString(R.string.fill_password)
-                }
-                viewModel.login(email, password)
-                viewModel.loginResult.observe(this) {
-                    Log.e("Login", "it: ${it}")
-                    if (it.error == false) {
-                        save(
-                            UserModel(
-                                it.loginResult?.token.toString(),
-                                it.loginResult?.name.toString(),
-                                it.loginResult?.userId.toString(),
-                                true
-                            )
-                        )
+                    binding.passwordEditText.error = R.string.password_length.toString()
+                } else {
+                    lifecycleScope.launch {
+                        viewModel.login(email, password).observe(this@LoginActivity) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is Result.Loading -> {
+                                        showLoading(true)
+                                    }
+
+                                    is Result.Success -> {
+                                        showLoading(false)
+                                        showToast(R.string.password_length.toString())
+                                        lifecycleScope.launch {
+                                            save(
+                                                UserModel(
+                                                    result.data.loginResult?.token.toString(),
+                                                    result.data.loginResult?.name.toString(),
+                                                    result.data.loginResult?.userId.toString(),
+                                                    true
+                                                )
+                                            )
+                                        }
+                                    }
+
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                        showToast(result.error)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+
             } catch (e: HttpException) {
                 showLoading(false)
                 val errorBody = e.response()?.errorBody()?.string()
-                val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+                val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
                 showToast(errorResponse.message)
             }
 
         }
     }
+
 
     private fun save(session: UserModel) {
         lifecycleScope.launch {

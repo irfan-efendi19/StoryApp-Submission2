@@ -30,4 +30,5 @@
     <string name="next">Lanjut</string>
     <string name="succes_login">Anda berhasil Registrasi. Sudah tidak sabar ya?</string>
     <string name="retry">Coba Lagi</string>
+    <string name="failed_login">Akun anda belum terdaftar. Cek kembali email dan password anda.</string>
 </resources>

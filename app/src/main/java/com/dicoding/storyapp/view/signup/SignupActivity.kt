@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.data.Result
 import com.dicoding.storyapp.data.response.RegisterResponse
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
 import com.dicoding.storyapp.view.ViewModelFactory
@@ -59,33 +60,41 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             if (name.isEmpty()) {
-                showLoading(false)
-                binding.nameEditTextLayout.error = getString(R.string.fill_username)
+                binding.nameEditTextLayout.error = R.string.fill_username.toString()
             } else if (email.isEmpty()) {
-                showLoading(false)
-                binding.emailEditTextLayout.error = getString(R.string.fill_email)
+                binding.emailEditTextLayout.error = R.string.fill_email.toString()
             } else if (password.isEmpty()) {
-                showLoading(false)
-                binding.passwordEditTextLayout.error = getString(R.string.fill_password)
+                binding.passwordEditTextLayout.error = R.string.fill_password.toString()
             }
 
             lifecycleScope.launch {
                 try {
-                    val response = viewModel.register(name, email, password)
-                    showLoading(false)
-                    showToast(response.message)
-                    AlertDialog.Builder(this@SignupActivity).apply {
-                        setTitle("Yeah!")
-                        setMessage(getString(R.string.succes_login))
-                        setPositiveButton(getString(R.string.next)) { _, _ ->
-                            val intent = Intent(context, LoginActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
+                    viewModel.register(name, email, password)
+                        .observe(this@SignupActivity) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is Result.Loading -> {
+                                        showLoading(true)
+                                    }
+
+                                    is Result.Success -> {
+                                        showLoading(false)
+                                        showToast("Register berhasil!")
+                                        val intent =
+                                            Intent(this@SignupActivity, LoginActivity::class.java)
+                                        intent.flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                        finish()
+                                    }
+
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                        showToast(result.error)
+                                    }
+                                }
+                            }
                         }
-                        create()
-                        show()
-                    }
                 } catch (e: HttpException) {
                     showLoading(false)
                     val errorBody = e.response()?.errorBody()?.string()
@@ -103,7 +112,8 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBarSignup.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
+        binding.progressBarSignup.visibility =
+            if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         binding.signupButton.isEnabled = !isLoading
     }
 }

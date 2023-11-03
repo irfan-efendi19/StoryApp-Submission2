@@ -3,6 +3,7 @@ package com.dicoding.storyapp.view.uploadstory
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,8 @@ import com.dicoding.storyapp.util.reduceFileImage
 import com.dicoding.storyapp.util.uriToFile
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -32,6 +35,9 @@ class UploadStoryActivity : AppCompatActivity() {
     private var _binding: ActivityStoryBinding? = null
     private val binding get() = _binding!!
     private var currentImageUri: Uri? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var latitude: Double? = null
+    private var longitude: Double? = null
 
     private val _viewModel by viewModels<UploadStoryViewModel> {
         ViewModelFactory.getInstance(this)
@@ -62,6 +68,7 @@ class UploadStoryActivity : AppCompatActivity() {
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setupAction()
     }
@@ -136,6 +143,55 @@ class UploadStoryActivity : AppCompatActivity() {
         }
 
     }
+
+//    private val requestPermissionLauncher =
+//        registerForActivityResult(
+//            ActivityResultContracts.RequestMultiplePermissions()
+//        ) { permissions ->
+//            when {
+//                permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+//                    getMyLastLocation()
+//                }
+//                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+//                    getMyLastLocation()
+//                }
+//                permissions[Manifest.permission.CAMERA] ?: false -> {}
+//                permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: false -> {}
+//                else -> {
+//                    Toast.makeText(this@UploadStoryActivity, R.string.permission, Toast.LENGTH_SHORT).show()
+//                    finish()
+//                }
+//            }
+//        }
+
+//    private fun getMyLastLocation() {
+//        if (allPermissionsGranted(Manifest.permission.ACCESS_FINE_LOCATION) &&
+//            allPermissionsGranted(Manifest.permission.ACCESS_COARSE_LOCATION) &&
+//            allPermissionsGranted(Manifest.permission.CAMERA) &&
+//            allPermissionsGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
+//        ) {
+//            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+//                if (location != null) {
+//                    latitude = location.latitude
+//                    longitude = location.longitude
+//                } else {
+//                    Toast.makeText(
+//                        this@UploadStoryActivity,
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        } else {
+//            requestPermissionLauncher.launch(
+//                arrayOf(
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.CAMERA
+//                )
+//            )
+//        }
+//    }
 
 
     private fun intentMainActivity() {

@@ -29,4 +29,5 @@
     <string name="next">Next</string>
     <string name="succes_login">You have successfully registered. Can`t wait, right?</string>
     <string name="retry">Retry</string>
+    <string name="failed_login">Your account is not registered yet. Check your email and password again.</string>
 </resources>

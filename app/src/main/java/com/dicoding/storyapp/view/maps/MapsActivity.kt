@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyapp.R
+import com.dicoding.storyapp.data.preference.UserPreference
 import com.dicoding.storyapp.data.response.ListStoryItem
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.dicoding.storyapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.model.LatLngBounds
+import kotlinx.coroutines.launch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -36,24 +39,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-//        mMap.uiSettings.apply {
-//            isZoomControlsEnabled = true
-//            isIndoorLevelPickerEnabled = true
-//            isCompassEnabled = true
-//            isMapToolbarEnabled = true
-//        }
 
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
@@ -71,6 +58,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         getMyLocation()
     }
+
+//    private fun observer() {
+//        val sharedPref = UserPreference.init(this, "session")
+//        val token = sharedPref.getString(UserPreference.Companion, "")
+//
+//        if (token != "") {
+//            lifecycleScope.launch {
+//                viewModel.getStoryWithLocation(token!!).observe(this@MapsActivity) {
+//                    when (it) {
+//                        is Result.Loading -> {
+//                            binding.progressBar.show()
+//                        }
+//                        is Result.Success -> {
+//                            binding.progressBar.hide()
+//                            setupMapData(it.data)
+//                        }
+//                        is Result.Error -> {
+//                            binding.progressBar.hide()
+//                            toast(it.error)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun setupMapData(data: List<ListStoryItem>) {
         data.forEach {
@@ -105,7 +117,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 getMyLocation()
             }
         }
-
     private fun getMyLocation() {
         if (ContextCompat.checkSelfPermission(
                 this.applicationContext,
