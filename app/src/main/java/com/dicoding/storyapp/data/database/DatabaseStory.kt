@@ -1,4 +1,4 @@
-package com.dicoding.database
+package com.dicoding.storyapp.data.database
 
 import android.content.Context
 import androidx.room.Database

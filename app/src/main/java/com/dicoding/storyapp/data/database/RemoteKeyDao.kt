@@ -1,4 +1,4 @@
-package com.dicoding.database
+package com.dicoding.storyapp.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert

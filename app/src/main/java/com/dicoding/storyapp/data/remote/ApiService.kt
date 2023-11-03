@@ -35,7 +35,10 @@ interface ApiService {
     ): LoginResponse
 
     @GET("stories")
-    fun getStories(): Call<StoryResponse>
+    suspend fun getStories(
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
+    ):StoryResponse
 
     @Multipart
     @POST("stories")
@@ -66,7 +69,6 @@ interface ApiService {
         @Part("lat") lat: Double,
         @Part("lon") lon: Double,
     ): CreateStoryResponse
-
 }
 
 

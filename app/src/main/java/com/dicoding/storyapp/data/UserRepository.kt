@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.dicoding.storyapp.data.preference.UserModel
 import com.dicoding.storyapp.data.preference.UserPreference
 import com.dicoding.storyapp.data.remote.ApiService
@@ -31,26 +35,38 @@ class UserRepository private constructor(
     var _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
 
-    fun getStory() {
-        _isLoading.value = true
-        val client = apiService.getStories()
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(
-                call: Call<StoryResponse>,
-                response: Response<StoryResponse>
-            ) {
-                if (response.isSuccessful) {
-                    _isLoading.value = false
-                    _list.value = response.body()?.listStory
-                }
-            }
+//    fun getStory(): LiveData<PagingData<ListStoryItem>> {
+//        @OptIn(ExperimentalPagingApi::class)
+//        return Pager(config = PagingConfig(
+//            pageSize = 5
+//        ),
+//            remoteMediator = StoryRemoteMediator(database, apiService),
+//            pagingSourceFactory = {
+//                database.storyDao().getAllStory()
+//            }
+//        ).liveData
+//    }
 
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e("Repository", "error: ${t.message}")
-            }
-        })
-    }
+//    fun getStory() {
+//        _isLoading.value = true
+//        val client = apiService.getStories()
+//        client.enqueue(object : Callback<StoryResponse> {
+//            override fun onResponse(
+//                call: Call<StoryResponse>,
+//                response: Response<StoryResponse>
+//            ) {
+//                if (response.isSuccessful) {
+//                    _isLoading.value = false
+//                    _list.value = response.body()?.listStory
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+//                _isLoading.value = false
+//                Log.e("Repository", "error: ${t.message}")
+//            }
+//        })
+//    }
 
     suspend fun register(
         name: String,
