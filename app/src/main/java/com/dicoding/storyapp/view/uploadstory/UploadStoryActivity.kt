@@ -34,6 +34,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import com.dicoding.storyapp.data.Result
 
+
 class UploadStoryActivity : AppCompatActivity() {
 
     private var _binding: ActivityStoryBinding? = null
@@ -80,7 +81,7 @@ class UploadStoryActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
+        getMyLastLocation()
         setupAction()
     }
 
@@ -88,11 +89,6 @@ class UploadStoryActivity : AppCompatActivity() {
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.buttonAdd.setOnClickListener { uploadImage() }
-        binding.itemCheck.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                getMyLastLocation()
-            }
-        }
     }
 
 
@@ -179,13 +175,12 @@ class UploadStoryActivity : AppCompatActivity() {
                 return
             }
 
-            val checkLocation = binding.itemCheck.isChecked
-            if (!checkLocation) {
-                lat = 0f.toDouble()
-                long = 0f.toDouble()
-            } else {
-                getMyLastLocation()
-            }
+//            if (!checkLocation) {
+//                lat = 0f.toDouble()
+//                long = 0f.toDouble()
+//            } else {
+//                getMyLastLocation()
+//            }
 
             val requestBody = description.toRequestBody("text/plain".toMediaType())
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())

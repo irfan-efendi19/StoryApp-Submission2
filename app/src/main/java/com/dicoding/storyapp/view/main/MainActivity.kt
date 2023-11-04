@@ -46,9 +46,6 @@ class MainActivity : AppCompatActivity() {
         getSession()
     }
 
-
-
-
     private fun getSession() {
         val adapter = StoryAdapter()
         viewModel.getSession().observe(this) { user ->
@@ -82,16 +79,11 @@ class MainActivity : AppCompatActivity() {
         else binding.progressBarMain.visibility = View.GONE
     }
 
-//    private fun setStoryList(stories: PagingData<ListStoryItem>) {
-//        val adapter = StoryAdapter()
-//        adapter.submitList(stories)
-//        binding.rvStory.adapter = adapter
-//    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.item_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.maps -> {
@@ -113,6 +105,4 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         _binding = null
     }
-
-
 }
