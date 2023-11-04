@@ -21,6 +21,8 @@
     <string name="enter_name">Enter Name</string>
     <string name="invalid_email">E-Mail is invalid! Must contain \"@\" and \".\".</string>
     <string name="invalid_file">Enter the image and description first</string>
+    <string name="invalid_location">Allow enabling Location Access</string>
+    <string name="upload">Succes Upload Story</string>
 
     //sign
     <string name="fill_username">Name cannot be empty</string>

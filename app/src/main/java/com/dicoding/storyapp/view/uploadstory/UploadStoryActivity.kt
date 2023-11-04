@@ -46,8 +46,8 @@ class UploadStoryActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private var lat = 0.0
-    private var long = 0.0
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -80,7 +80,9 @@ class UploadStoryActivity : AppCompatActivity() {
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         getMyLastLocation()
         setupAction()
     }
@@ -137,12 +139,11 @@ class UploadStoryActivity : AppCompatActivity() {
             }
 
             permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
-                // Only approximate location access granted.
                 getMyLastLocation()
             }
 
             else -> {
-                // No location access granted.
+                showToast(getString(R.string.invalid_location))
             }
         }
     }
@@ -151,8 +152,8 @@ class UploadStoryActivity : AppCompatActivity() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) && checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    lat = location.latitude
-                    long = location.longitude
+                    latitude = location.latitude
+                    longitude = location.longitude
                 }
             }
         } else {
@@ -175,13 +176,6 @@ class UploadStoryActivity : AppCompatActivity() {
                 return
             }
 
-//            if (!checkLocation) {
-//                lat = 0f.toDouble()
-//                long = 0f.toDouble()
-//            } else {
-//                getMyLastLocation()
-//            }
-
             val requestBody = description.toRequestBody("text/plain".toMediaType())
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
             val multipartBody = MultipartBody.Part.createFormData(
@@ -192,8 +186,8 @@ class UploadStoryActivity : AppCompatActivity() {
                     _viewModel.uploadStory(
                         multipartBody,
                         requestBody,
-                        lat.toFloat(),
-                        long.toFloat()
+                        latitude.toFloat(),
+                        longitude.toFloat()
                     ).observe(this@UploadStoryActivity) { result ->
                         if (result != null) {
                             when (result) {
@@ -203,7 +197,7 @@ class UploadStoryActivity : AppCompatActivity() {
 
                                 is Result.Success -> {
                                     showLoading(false)
-                                    showToast("Upload berhasil!")
+                                    showToast(getString(R.string.upload))
                                     intentMainActivity()
                                 }
 

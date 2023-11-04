@@ -7,8 +7,8 @@ import com.dicoding.storyapp.data.response.ListStoryItem
 
 @Database(
     entities = [ListStoryItem::class, RemoteKeys::class],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    exportSchema = true
 )
 abstract class DatabaseStory : RoomDatabase() {
     abstract fun storyDao(): StoryDao

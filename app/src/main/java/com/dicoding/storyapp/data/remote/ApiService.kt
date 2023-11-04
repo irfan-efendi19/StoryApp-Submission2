@@ -60,24 +60,6 @@ interface ApiService {
     suspend fun getStoriesWithLocation(
         @Query("location") location: Int = 1,
     ): StoryResponse
-
-//    @GET("stories")
-//    suspend fun getStory(
-//        @Header("Authorization") token: String,
-//        @Query("page") page: Int,
-//        @Query("size") size: Int,
-//        @Query("location") location: Int
-//    ): StoryResponse
-
-//    @Multipart
-//    @POST("stories")
-//    suspend fun createStory(
-//        @Header("Authorization") token: String,
-//        @Part file: MultipartBody.Part,
-//        @Part("description") description: RequestBody,
-//        @Part("lat") lat: Double,
-//        @Part("lon") lon: Double,
-//    ): CreateStoryResponse
 }
 
 

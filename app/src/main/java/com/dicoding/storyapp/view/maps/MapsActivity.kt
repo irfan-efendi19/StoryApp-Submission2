@@ -65,6 +65,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         mMap.moveCamera(CameraUpdateFactory.newLatLng(dicodingSpace))
 
+
+        getMyLocation()
+        getStoryLocation()
+        setMapStyle(googleMap)
+    }
+
+    private fun getStoryLocation() {
         lifecycleScope.launch {
             viewModel.getStoriesWithLocation().observe(this@MapsActivity) { stories ->
                 if (stories != null) {
@@ -77,8 +84,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             stories.data.listStory.forEach { story ->
                                 val lat = LatLng(story.lat!!, story.lon!!)
                                 mMap.addMarker(
-                                    MarkerOptions().position(lat).title(story.name)
-                                        .snippet(story.description)
+                                    MarkerOptions()
+                                        .position(LatLng(story.lat, story.lon))
+                                        .title("Story dari : ${story.name}")
+                                        .snippet("Deskripsi: ${story.description}")
                                 )
                                 boundsBuilder.include(lat)
                             }
@@ -100,34 +109,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
-        getMyLocation()
-        setMapStyle(googleMap)
-    }
-
-
-    private fun setupMapData(data: List<ListStoryItem>) {
-        data.forEach {
-            if (data.isNotEmpty()) {
-                val latLng = LatLng(it.lat!!, it.lon!!)
-                mMap.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(it.lat, it.lon))
-                        .title("Story dari : ${it.name}")
-                        .snippet("Deskripsi: ${it.description}")
-                )
-                boundsBuilder.include(latLng)
-            }
-        }
-
-        val bounds: LatLngBounds = boundsBuilder.build()
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngBounds(
-                bounds,
-                resources.displayMetrics.widthPixels,
-                resources.displayMetrics.heightPixels,
-                300
-            )
-        )
     }
 
     private val requestPermissionLauncher =
@@ -146,7 +127,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setMapStyle(googleMap: GoogleMap) {
         try {
             val success =
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(binding.root.context, R.raw.maps))
+                googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        binding.root.context,
+                        R.raw.maps
+                    )
+                )
             if (!success) {
             }
         } catch (exception: Resources.NotFoundException) {
