@@ -85,7 +85,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:21.0.1")
 
     //Paging
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation("androidx.room:room-paging:2.6.0")
 
     //Testing
