@@ -51,10 +51,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.uiSettings.isIndoorLevelPickerEnabled = true
-        mMap.uiSettings.isCompassEnabled = true
-        mMap.uiSettings.isMapToolbarEnabled = true
+        mMap.uiSettings.apply {
+            isZoomControlsEnabled = true
+            isIndoorLevelPickerEnabled = true
+            isCompassEnabled = true
+            isMapToolbarEnabled = true
+        }
 
         val dicodingSpace = LatLng(-6.8957643, 107.6338462)
         mMap.addMarker(
@@ -82,14 +84,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         is Result.Success -> {
                             stories.data.listStory.forEach { story ->
-                                val lat = LatLng(story.lat!!, story.lon!!)
+                                val latlng = LatLng(story.lat!!, story.lon!!)
                                 mMap.addMarker(
                                     MarkerOptions()
                                         .position(LatLng(story.lat, story.lon))
                                         .title("Story dari : ${story.name}")
                                         .snippet("Deskripsi: ${story.description}")
                                 )
-                                boundsBuilder.include(lat)
+                                boundsBuilder.include(latlng)
                             }
                             val bounds: LatLngBounds = boundsBuilder.build()
                             mMap.animateCamera(
@@ -134,6 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                 )
             if (!success) {
+                showToast(getString(R.string.invalid_location))
             }
         } catch (exception: Resources.NotFoundException) {
         }

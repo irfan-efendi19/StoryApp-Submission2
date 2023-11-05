@@ -40,6 +40,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[NAME_KEY] = ""
             preferences[USER_ID] = ""
             preferences[IS_LOGIN_KEY] = false
+            preferences.clear()
         }
     }
 

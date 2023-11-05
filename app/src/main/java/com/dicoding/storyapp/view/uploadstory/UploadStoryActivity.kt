@@ -83,7 +83,6 @@ class UploadStoryActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        getMyLastLocation()
         setupAction()
     }
 
@@ -91,6 +90,11 @@ class UploadStoryActivity : AppCompatActivity() {
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.buttonAdd.setOnClickListener { uploadImage() }
+        binding.itemCheck.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                getMyLastLocation()
+            }
+        }
     }
 
 
@@ -134,7 +138,6 @@ class UploadStoryActivity : AppCompatActivity() {
     ) { permissions ->
         when {
             permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
-                // Precise location access granted.
                 getMyLastLocation()
             }
 

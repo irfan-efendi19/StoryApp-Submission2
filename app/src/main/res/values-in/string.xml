@@ -24,6 +24,7 @@
     <string name="invalid_file">Masukkan gambar dan deskripsi terlebih dahulu</string>
     <string name="invalid_location">Izinkan mengaktifkan Akses Lokasi </string>
     <string name="upload">Sukses Unggah Cerita</string>
+    <string name="invalid_syle">Maps Style Error</string>
 
     //sign
     <string name="fill_username">Nama tidak boleh kosong</string>
